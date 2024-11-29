@@ -1,56 +1,47 @@
-# SLCSP
+## Calculating the Second Lowest Cost Silver Plan
+#### **Author**: Annabelle Wright, 2024
 
-## Calculate the second lowest cost silver plan
+### Prequisites
+* **Python 3.11** (This code was built and tested in Python 3.11, older versions may run but cannot be 
+guaranteed)
 
-## Problem
+### Introduction
+The program `slcsp.py` computes the second lowest cost silver plan (SLCP) given a list
+of zip codes and a list of plans.
 
-You've been asked to determine the second lowest cost silver plan (SLCSP) for
-a group of ZIP codes.
+Run this program using the following command:
 
-## Task
+`python3 slcsp.py ./slcsp/slcsp.csv ./slcsp/zips.csv ./slcsp/plans.csv ./output.csv`
 
-You've been given a CSV file, `slcsp.csv`, which contains the ZIP codes in the
-first column. Fill in the second column with the rate (see below) of the
-corresponding SLCSP and emit the answer on `stdout` using the same CSV format as
-the input. Write your code in your best programming language.
+The program accepts the following four required arguments:
 
-### Expected output
+* **slcsp.csv file**: This file contains a list of the zip codes for which you want to compute
+    the SLCP.
+* **zips.csv**: This file is a table of the information needed to compute which zipcode goes
+    with each state and rate area. (See ** Additional Considerations** section for limitations and constraints)
+* **plans.csv**: This file is a table of the information needed to compute which rates for each level
+  of a plan go with the appropriate State, Rate area tuple. 
+* **output.csv**: This file path denotes where you would like to save your output from running this program.
+  By default, output will be printed to stdout as well.
 
-The order of the rows in your answer as emitted on stdout must stay the same as how they
-appeared in the original `slcsp.csv`. The first row should be the column headers: `zipcode,rate`
-The remaining lines should output unquoted values with two digits after the decimal
-place of the rates, for example: `64148,245.20`.
+This project also includes a unit testing file, `testrunner.py`. You can run the included test suite
+using the following command:
 
-It may not be possible to determine a SLCSP for every ZIP code given; for example, if there is only one silver plan available, there is no _second_ lowest cost plan. Check for cases where a definitive answer cannot be found and leave those cells blank in the output (no quotes or zeroes or other text). For example, `40813,`.
+`python3 testrunner.py -v`
 
-## Additional information
 
-The SLCSP is the so-called "benchmark" health plan in a particular area. It's
-used to compute the tax credit that qualifying individuals and families receive
-on the marketplace. It's the second lowest rate for a silver plan in the rate area.
+## Additional Considerations
+To focus on the explicit requirements of this program, there are a few decisions that were made in order to
+keep the logic simpler and more straightforward.
 
-For example, if a rate area had silver plans with rates of `[197.3, 197.3, 201.1, 305.4, 306.7, 411.24]`, the SLCSP for that rate area would be `201.1`,
-since it's the second lowest rate in that rate area.
+In the function `open_zip_codes_and_build_dictionary(csv_zip_file_path: str) -> dict`, 
+I made the decision to deal with any ambiguous ZIPCODE: (STATE, RATE_AREA) by setting the value to `None`. 
+I followed this pattern to keep the data structure as simple as possible and maintain low complexity.
+The following cases are ambiguous according to my assumptions of the given problem:
+* If a zipcode has more than one rate_area per state
+* If a zipcode has more than one state associated with it
 
-A plan has a "metal level", which can be either Bronze, Silver, Gold, Platinum,
-or Catastrophic. The metal level is indicative of the level of coverage the plan
-provides.
+The second decision that I made was to output the results to stdout as well as a defined csv file. Because
+of the language in the requirements stating 'Fill in the second column', I interpreted this as asking for the
+.csv file itself to be generated. The overhead on adding in this functionality was not too complex.
 
-A plan has a "rate", which is the amount that a consumer pays as a monthly
-premium, in dollars.
-
-A plan has a "rate area", which is a geographic region in a state that
-determines the plan's rate. A rate area is a tuple of a state and a number, for
-example, NY 1, IL 14.
-
-There are two additional CSV files in this directory besides `slcsp.csv`:
-
-- `plans.csv` — all the health plans in the U.S. on the marketplace
-- `zips.csv` — a mapping of ZIP code to county/counties & rate area(s)
-
-A ZIP code can potentially be in more than one county. If the county can not be
-determined definitively by the ZIP code, it may still be possible to determine
-the rate area for that ZIP code. A ZIP code can also be in more than one rate area. In that case, the answer is ambiguous
-and should be left blank.
-
-We'll want to compile your code from source and run it from a Unix-like command line, so please include the complete instructions for doing so in a COMMENTS file.
