@@ -4,7 +4,7 @@ import sys, csv
 
 
 # Takes an input csv file of zipcodes and associated areas, and returns a dictionary mapping zipcodes
-# to a tuple (STATE_CODE, RATE_AREA). See 'Considerations' section in README.md file for more information
+# to a tuple (STATE_CODE, RATE_AREA). See 'Considerations' section in COMMENTS.md file for more information
 # about this section.
 def open_zip_codes_and_build_dictionary(csv_zip_file_path: str) -> dict:
     zipcode_dictionary = {}
